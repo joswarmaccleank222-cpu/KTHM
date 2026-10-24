@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para mi niña hermosa ❤️ - Katherine</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-burgundy: #4a0e17;
+            --color-burgundy-dark: #2d080e;
+            --color-gold: #d4af37;
+            --color-paper: #fcf8f2;
+            --color-paper-shadow: #e8dfd1;
+            --color-text: #3a2226;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background-color: #120305;
+            color: var(--color-text);
+            overflow-x: hidden;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-title { font-family: 'Playfair Display', serif; }
+        .font-script { font-family: 'Great Vibes', cursive; }
+        .font-body { font-family: 'Cormorant Garamond', serif; }
+
+        /* 3D Stage Optimization */
+        .stage {
+            perspective: 1600px;
+            perspective-origin: 50% 50%;
+        }
+
+        .book-wrapper {
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        /* Accelerated Page Flip Effects */
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            transform-style: preserve-3d;
+            transform-origin: left center;
+            transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: transform;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            backface-visibility: hidden;
+            user-select: none;
+        }
+
+        .page-front, .page-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            backface-visibility: hidden;
+            overflow: hidden;
+            border-radius: 4px 12px 12px 4px;
+            transform: translateZ(0);
+        }
+
+        .page-back {
+            transform: rotateY(180deg) translateZ(0);
+        }
+
+        .page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        /* Spine Shadows */
+        .page-front::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 18px;
+            background: linear-gradient(to right, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 100%);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .page-back::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 18px;
+            background: linear-gradient(to left, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 100%);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Standardized Typography & Controlled PC/Desktop Font Size */
+        .fluid-paragraph {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(0.85rem, 1.2vw + 0.3rem, 1.02rem);
+            line-height: clamp(1.35, 1.1vw + 1.05, 1.55);
+            hyphens: none !important;
+            -webkit-hyphens: none !important;
+            word-break: normal !important;
+            overflow-wrap: break-word;
+            text-align: left;
+        }
+
+        .verse-paragraph {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(0.88rem, 1.3vw + 0.3rem, 1.05rem);
+            line-height: 1.45;
+            hyphens: none !important;
+            -webkit-hyphens: none !important;
+            word-break: normal !important;
+        }
+
+        /* Scrollbars */
+        .custom-scroll::-webkit-scrollbar { width: 3px; }
+        .custom-scroll::-webkit-scrollbar-track { background: rgba(212, 175, 55, 0.08); }
+        .custom-scroll::-webkit-scrollbar-thumb { background: var(--color-gold); border-radius: 4px; }
+
+        /* Floating Hearts Animation */
+        .heart-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 5;
+            animation: floatUp 3.2s linear forwards;
+            opacity: 0.8;
+            will-change: transform, opacity;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.1); opacity: 0; }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.08); }
+        }
+        .pulse-glow { animation: pulseGlow 2s infinite ease-in-out; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between items-center relative select-none antialiased overflow-x-hidden py-2 px-2 sm:px-6">
+
+    <div id="heartContainer" class="fixed inset-0 pointer-events-none overflow-hidden z-0"></div>
+
+    <!-- Header Controls -->
+    <header class="w-full max-w-2xl flex justify-between items-center z-20 px-3 py-2 mb-1 bg-black/70 backdrop-blur-md rounded-full border border-amber-900/40 text-amber-100 shadow-lg">
+        <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-book-heart text-amber-400 text-xs sm:text-sm"></i>
+            <span class="font-title font-semibold text-xs sm:text-sm tracking-wide text-amber-200">Para Katherine</span>
+        </div>
+        
+        <div class="flex items-center space-x-1.5 sm:space-x-2 text-[11px] sm:text-xs">
+            <!-- Leer Texto Button -->
+            <button id="readBtn" class="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-amber-900/50 hover:bg-amber-800/60 border border-amber-500/30 text-amber-200 transition-colors" title="Leer esta página en voz alta">
+                <i id="readIcon" class="fa-solid fa-volume-high text-amber-400 text-xs"></i>
+                <span id="readText">Leer</span>
+            </button>
+
+            <!-- Music Button -->
+            <button id="musicBtn" class="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-amber-900/50 hover:bg-amber-800/60 border border-amber-500/30 text-amber-200 transition-colors">
+                <i id="musicIcon" class="fa-solid fa-music text-xs"></i>
+                <span id="musicText" class="hidden sm:inline">Música</span>
+            </button>
+
+            <!-- Particles Button -->
+            <button id="particlesBtn" class="flex items-center space-x-1 px-2 py-1 rounded-full bg-amber-900/50 hover:bg-amber-800/60 border border-amber-500/30 text-amber-200 transition-colors" title="Corazones">
+                <i class="fa-solid fa-heart text-red-400 text-xs"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Stage -->
+    <main class="w-full flex-1 flex flex-col items-center justify-center relative z-10 stage py-1">
+        <div id="book" class="book-wrapper w-[92vw] max-w-[380px] sm:max-w-[430px] md:max-w-[460px] h-[74vh] min-h-[450px] max-h-[610px] relative">
+            <!-- Pages injected by JS -->
+        </div>
+    </main>
+
+    <!-- Footer Controls -->
+    <footer class="w-full max-w-md flex flex-col items-center z-20 px-3 mt-1 space-y-2">
+        <div class="w-full bg-amber-950/70 h-1.5 rounded-full overflow-hidden border border-amber-800/40">
+            <div id="progressBar" class="bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-300 h-full w-0 transition-all duration-300"></div>
+        </div>
+
+        <div class="w-full flex justify-between items-center">
+            <button id="prevBtn" class="flex items-center space-x-1.5 px-4 py-2 rounded-full bg-amber-950/90 hover:bg-amber-900 text-amber-200 border border-amber-600/40 shadow-lg active:scale-95 transition-transform cursor-pointer">
+                <i class="fa-solid fa-chevron-left text-xs"></i>
+                <span class="text-xs font-semibold">Anterior</span>
+            </button>
+
+            <div class="text-amber-200/90 text-xs font-title px-3.5 py-1 rounded-full bg-black/70 border border-amber-900/50">
+                <span id="currentPageNum" class="text-amber-400 font-bold">1</span> / <span id="totalPagesNum">--</span>
+            </div>
+
+            <button id="nextBtn" class="flex items-center space-x-1.5 px-4 py-2 rounded-full bg-amber-950/90 hover:bg-amber-900 text-amber-200 border border-amber-600/40 shadow-lg active:scale-95 transition-transform cursor-pointer">
+                <span class="text-xs font-semibold">Siguiente</span>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
+        </div>
+
+        <p class="text-[10px] sm:text-xs text-amber-300/60 text-center">
+            Toca las páginas o usa los botones para avanzar
+        </p>
+    </footer>
+
+    <script>
+        const rawPages = [
+            {
+                type: 'cover',
+                title: 'Para el amor de mi vida ❤️',
+                subtitle: 'Katherine',
+                footer: 'Mi niña hermosa, mi palomita guasiruca, mi loba, la niña de mis ojos…'
+            },
+            {
+                type: 'content',
+                text: 'Mi amor, quiero dedicarte estas palabras porque siento que decirte simplemente gracias se queda demasiado corto para todo lo que quiero expresarte. Hay sentimientos que uno quisiera poder sacar del pecho y ponerlos frente a la persona que ama para que pudiera verlos tal como son, sin que ninguna palabra se quede pequeña, sin que ninguna frase consiga resumirlos por completo. Y eso me pasa con vos, corazón. Tengo tantas cosas que agradecerte, tantas cosas que admiro de vos y tanto amor guardado para darte que, cuando intento encontrar la manera de expresártelo, siento que siempre me hace falta algo más.'
+            },
+            {
+                type: 'content',
+                text: 'Quiero que sepás lo mucho que valoro la manera en que estuviste para mí cuando no me sentía bien. Me escuchaste, me recordaste que estaba haciendo las cosas bien, me dijiste que soy un amor, que soy una buena persona y que me amás. Quizá para vos fueron palabras que te nacieron del corazón, palabras que dijiste porque me querés y porque deseabas hacerme sentir mejor, pero quiero que entendás que para mí significaron muchísimo más de lo que imaginás.'
+            },
+            {
+                type: 'content',
+                text: 'A veces, mi amor, uno necesita que alguien le recuerde las cosas bonitas que hay en él, que le haga ver que está intentando hacer las cosas bien y que no todo lo que le cuesta significa que esté fallando. Y vos tuviste esa manera tan tuya de hacerme sentir mejor. No necesitaste resolver mis problemas, cambiar las circunstancias ni encontrar una respuesta para cada cosa que me pasaba. Me escuchaste, me hablaste con cariño y me recordaste que me amás. Y hay algo profundamente hermoso en saber que, entre tantas personas en este mundo, tengo a una mujer que no solamente ocupa mis pensamientos y mi corazón, sino que también se preocupa por cómo me siento y quiere verme bien.'
+            },
+            {
+                type: 'content',
+                text: 'Gracias, mi amor, por ser también ternura cuando la vida pesa un poquito más.\n\nGracias por tus palabras, por tu paciencia, por hacerme sentir que mis preocupaciones pueden encontrar un espacio en vos y por recordarme cosas bonitas de mí mismo cuando necesito escucharlas. Gracias por no limitarte a ser la mujer de la que estoy enamorado, sino por ser también esa persona cuya compañía me hace bien, cuya voz puede cambiarme el ánimo y cuyo cariño tiene una manera muy especial de llegar hasta lo más profundo de mí.'
+            },
+            {
+                type: 'content',
+                text: 'Y quiero que sepás algo: no agradezco estas cosas solamente porque me ayudan a sentirme mejor. Las agradezco porque vienen de vos. Porque sos vos quien me escucha, quien me dice que me ama, quien me mira con cariño y quien, con palabras que quizá parecen sencillas, consigue hacerme sentir muy afortunado de compartir la vida con ella. Si algún día me preguntaran qué cosas hacen especial nuestro amor, yo no hablaría solamente de nuestros momentos más románticos, de nuestros besos o de las veces que nos decimos cuánto nos amamos. También hablaría de esto: de poder acudir a vos, de sentir tu cariño y de descubrir que el amor también vive en una conversación sincera, en unas palabras bonitas y en la voluntad de hacer sentir bien a la persona que uno ama.'
+            },
+            {
+                type: 'content',
+                text: 'Y es que, Katherine, yo no solamente estoy enamorado de vos; estoy profundamente agradecido de que seas vos la mujer de la que me enamoré.\n\nAdmiro a la mujer que sos. Admiro tus cualidades, tu forma de sentir, tu manera de preocuparte por las personas que amás y todas esas cosas que te hacen ser tan particularmente vos. Me gusta descubrirte, seguir conociéndote y encontrar detalles tuyos que me recuerdan que enamorarse de alguien no tiene por qué ser un acontecimiento que sucede una sola vez. A veces también es algo que sucede poquito a poquito, cuando volvés a mirar a esa persona y descubrís una razón más para quererla.'
+            },
+            {
+                type: 'content',
+                text: 'Y yo quiero seguir descubriéndote, mi niña. Quiero seguir aprendiendo de vos, admirándote, escuchándote y encontrando maneras de amarte que todavía no conozco. Quiero que el tiempo me permita conocer las distintas versiones de vos que aún están por llegar, acompañarte en tus sueños, celebrar tus logros, verte crecer y estar a tu lado mientras vos también descubrís nuevas partes de vos misma. No quiero que nuestro amor sea solamente algo bonito que nos pasó; quiero que sea algo bonito que sigamos construyendo.'
+            },
+            {
+                type: 'content',
+                text: 'Porque, entre todas las cosas que siento por vos, hay una que quiero que nunca te genere dudas: yo te amo, te admiro y te deseo. Me enamora tu corazón, me encanta tu manera de ser y me atraés de una forma que no se limita a lo físico, aunque, por Dios, mi amor, ¡qué hermosa sos! Me gustás como mujer, como novia, como compañera y como esa persona que consigue despertar en mí unas ganas inmensas de abrazarla, besarla, tenerla cerquita y llenarla de cariño. Me gustás cuando te arreglás y cuando estás completamente natural; cuando estás contenta, cuando te emocionás por algo y cuando simplemente sos vos, sin intentar ser nada más.'
+            },
+            {
+                type: 'content',
+                text: 'Y, hablando de tu belleza, necesito detenerme en tus ojos.\n\nTus ojos, mi amor… tus ojos son las perlas más hermosas que he visto en mi vida. Y no te lo digo por decirte algo bonito ni porque esté buscando una manera romántica de describirte. Es que hay algo en ellos que me encanta de una forma que no tiene sentido. Podría mirarlos y encontrarles siempre algo nuevo, podría quedarme contemplándolos y seguir pensando que tuve una suerte increíble al conocer a la mujer que los tiene. Son parte de esa belleza tuya que me enamora, pero también hay algo más: cuando pienso en tus ojos, pienso en vos, en tu mirada, en tu presencia y en todas esas pequeñas cosas que hacen que seas la persona que quiero tener cerquita.'
+            },
+            {
+                type: 'content',
+                text: 'Si el mundo estuviera lleno de estrellas, yo seguiría encontrando algo especial en la manera en que brillan tus ojos. Si me pidieran elegir una imagen bonita para guardar conmigo, elegiría una de vos mirándome. Y si algún día me faltaran las palabras para explicarte cuánto te amo, quizá bastaría con mirarte a los ojos y dejar que mi mirada intentara decirte todo lo que mi boca no alcanza.\n\nPorque hay bellezas que llaman la atención, pero la tuya, mi niña, tiene la particularidad de hacer que yo quiera quedarme.'
+            },
+            {
+                type: 'content',
+                text: 'Y no me imagino una vida que yo quiera construir sin tu presencia. No porque crea que la vida deba ser perfecta ni porque piense que todo será siempre sencillo, sino porque, cuando sueño con lo que quiero para my futuro, vos aparecés en él de una manera tan natural que ya no sé separar mis sueños de esa imagen en la que estamos juntos.'
+            },
+            {
+                type: 'content',
+                text: 'Sueño con vos, mi amor. Y no hablo solamente de esas veces en las que me duermo y aparecés en mis sueños, aunque me encanta que hasta dormido mi mente encuentre maneras de acercarme a vos. Hablo también de los sueños que tengo despierto, de esos que aparecen cuando pienso en lo que quiero hacer con my vida, en el hogar que quisiera construir, en las experiencias que me gustaría compartir y en las cosas que algún día quiero recordar con una sonrisa.'
+            },
+            {
+                type: 'content',
+                text: 'Sueño con verte cumplir tus metas y poder abrazarte cuando lo logrés. Sueño con que tengamos historias que contar, fotografías que mirar años después y recuerdos que nos hagan reír de las cosas que hoy parecen tan importantes. Sueño con nuestras pequeñas costumbres, con las conversaciones que todavía no hemos tenido y con todos esos días ordinarios que, por el simple hecho de compartirlos con vos, podrían convertirse en mis días favoritos.'
+            },
+            {
+                type: 'content',
+                text: 'Sueño con una vida en la que podamos llegar cansados y encontrar cariño el uno en el otro, en la que podamos contarnos cómo nos fue, reírnos por cualquier tontería y sentir que, después de un día largo, todavía tenemos algo bonito que compartir. Sueño con seguir enamorándote, con hacerte sentir hermosa, deseada, admirada y amada. Sueño con poder mirarte dentro de muchos años y pensar que aquella niña de la que me enamoré sigue siendo la mujer con la que quiero compartir mis días.'
+            },
+            {
+                type: 'content',
+                text: 'Y, mi niña, si algo tengo claro es que no quiero reservar mi amor únicamente para las ocasiones especiales. Quiero amarte en lo cotidiano, en las pequeñas decisiones, en los detalles que nadie más ve. Quiero que el amor que te digo con palabras también pueda sentirse en mis acciones, en la manera en que te escucho, en cómo te trato, en el respeto que te doy y en la voluntad de seguir aprendiendo a ser un buen compañero para vos.'
+            },
+            {
+                type: 'content',
+                text: 'Porque yo quiero ser tu novio con todo lo bonito que significa esa palabra, pero también quiero ser tu compañero de vida, tu amigo, tu cómplice y ese hombre al que podás mirar y decirle lo que llevás en el corazón. Quiero que tengamos la confianza de hablar de nuestras alegrías y de nuestras preocupaciones, de celebrar lo que nos salga bien y de encontrar juntos la manera de afrontar aquello que nos cueste. Quiero que podamos crecer sin dejar de admirarnos, cambiar sin dejar de conocernos y avanzar sin olvidarnos de todas las razones por las que empezamos a elegirnos.'
+            },
+            {
+                type: 'content',
+                text: 'Y cuando pienso en eso, me nace decirte que te quiero en mi vida sin importar lo que venga, mi amor. Que deseo compartir con vos las distintas estaciones que nos toque atravesar, las etapas bonitas y las que nos exijan paciencia, los días llenos de planes y aquellos en los que lo único que necesitemos sea estar cerquita. No puedo prometerte que la vida siempre nos pondrá las cosas fáciles, pero sí puedo decirte que mi deseo es caminar a tu lado, cuidando lo nuestro y haciendo mi parte para que el amor que sentimos siga encontrando maneras de crecer.'
+            },
+            {
+                type: 'content',
+                text: 'Y cuando pienso en el paso del tiempo, cuando imagino todo lo que puede cambiar a nuestro alrededor, hay algo que me parece precioso: la posibilidad de seguir eligiéndote. Que no importe cuántos cumpleaños celebremos, cuántas experiencias acumulemos o cuántas versiones de nosotros mismos lleguemos a conocer; que podamos seguir encontrando motivos para tomarnos de la mano.'
+            },
+            {
+                type: 'content',
+                text: 'Incluso cuando pienso en la muerte, en ese límite inevitable que algún día alcanza a todas las historias humanas, lo que me nace es agradecer que la vida me haya permitido coincidir con vos y desear que el tiempo que tengamos sea un tiempo lleno de amor. No quiero hablarte de finales, mi niña, sino de todo lo que deseo vivir mientras estemos aquí: de los abrazos que todavía quiero darte, de las veces que quiero verte reír, de las cosas que quiero aprender de vos y de todas las maneras en que quisiera demostrarte que sos la mujer de mi vida.'
+            },
+            {
+                type: 'content',
+                text: 'Si amar es tener un lugar al que el corazón siempre quiere volver, el mío ha aprendido a reconocer el camino hacia vos.\n\nY mirá que yo podría escribirte páginas enteras diciéndote cuánto te amo, pero todavía me faltaría hablarte de algo que para mí es muy importante: lo que significa tenerte como mi niña, mi palomita guasiruca, mi loba y la niña de mis ojos.'
+            },
+            {
+                type: 'content',
+                text: 'Mi palomita guasiruca, qué bonito es tener un nombre tan nuestro para llamarte, una forma de hablarte que lleva un pedacito de nuestra historia y que probablemente no necesita tener sentido para nadie más. Me encanta que nuestro amor tenga esas pequeñas cosas que nos pertenecen, esas palabras que se vuelven especiales porque salen de nosotros y que, con el tiempo, terminan guardando recuerdos enteros.'
+            },
+            {
+                type: 'content',
+                text: 'Mi niña de mis ojos, vos no tenés que hacer nada extraordinario para que yo te mire con amor. Hay algo en vos que me despierta ternura, admiración y unas ganas inmensas de cuidarte. Y mi loba, mi mujer hermosa, también amo esa parte tuya que te hace ser quien sos, esa personalidad que no se puede resumir en una sola palabra y que yo quiero seguir conociendo, respetando y admirando.'
+            },
+            {
+                type: 'content',
+                text: 'Sos mi niña hermosa, sí, pero también sos una mujer a la que admiro profundamente. Una mujer a la que deseo, a la que quiero ver feliz, a la que me encanta escuchar y con la que me ilusiona construir un futuro. Sos mi novia y sos mucho más que un título bonito en mi vida: sos alguien a quien quiero dedicarle tiempo, atención, ternura y lo mejor de mí.'
+            },
+            {
+                type: 'content',
+                text: 'Y por eso también quiero que sepás que yo veo tu manera de amarme. Veo esos momentos en los que te preocupás por mí, cuando me escuchás y cuando me decís cosas que me hacen bien. No quiero que pensés que pasan desapercibidos, ni que tenés que hacer algo enorme para que yo reconozca tu amor. Lo veo en esos detalles, lo siento en tus palabras y lo agradezco de corazón.'
+            },
+            {
+                type: 'content',
+                text: 'Quiero que siempre tengás la libertad de ser vos conmigo, de contarme lo que sentís, de compartir tus sueños y de hablarme de las cosas que te preocupan. Quiero aprender a escucharte tan bonito como vos me escuchaste, recordarte tus cualidades cuando necesités escucharlas y celebrar tus logros como si una parte de ellos también viviera en mí. Quiero que el amor que te doy sea algo que podás sentir, no solamente algo que tengás que leer en una carta.'
+            },
+            {
+                type: 'content',
+                text: 'Porque, mi amor, yo también quiero ser ese hombre que te recuerde lo valiosa que sos, que admire tu belleza incluso cuando vos no estés pensando en ella y que te diga, sin cansarse, que está enamorado de la mujer que tiene a su lado. Quiero que nunca te falten motivos para saber que te amo, que te deseo, que te admiro y que me siento orgulloso de compartir mi vida con vos.'
+            },
+            {
+                type: 'content',
+                text: 'Y si algún día volvés a preguntarte qué significás para mí, ojalá recordés estas palabras: significás la oportunidad de amar a alguien de una manera que me llena de ilusión; la alegría de tener una persona a quien contarle mis cosas; la emoción de imaginar un futuro compartido y la gratitud de saber que, entre tantas posibilidades, existe esta historia nuestra.'
+            },
+            {
+                type: 'content',
+                text: 'No sé cuántas páginas podría llenar con todo lo que siento por vos. Lo que sí sé es que nunca quisiera que te faltara la certeza de que sos profundamente amada. No solamente por las palabras bonitas que puedo escribirte, sino por todo lo que deseo demostrarte mientras seguimos construyendo nuestra historia.'
+            },
+            {
+                type: 'content',
+                text: 'Gracias, Katherine. Gracias por escucharme, por hablarme con amor, por recordarme que estoy haciendo las cosas bien y por darme ese cariño que tanto valoro. Gracias por ser parte de mi vida y por permitirme ser parte de la tuya. Gracias por esas cosas que quizá para vos son pequeñas, pero que para mí se convierten en razones para sonreír y sentirme afortunado.\n\nY gracias, sobre todo, por ser vos. Porque, entre todo lo que podría agradecerte, está el privilegio de conocer a la mujer que sos y de poder decir que estoy enamorado de ella.'
+            },
+            {
+                type: 'poem',
+                title: 'Mi amor, si tuviera que resumir todo lo que siento en unos pocos versos...',
+                verses: [
+                    "Si la vida me llevara por mil caminos,",
+                    "si el tiempo cambiara el paisaje a mi alrededor,",
+                    "quisiera seguir encontrando tus ojos,",
+                    "y reconocer en ellos mi lugar de amor.",
+                    "",
+                    "Que no se nos acaben las ganas de descubrirnos,",
+                    "ni los motivos para volvernos a elegir;",
+                    "que cada nueva versión de nuestras vidas",
+                    "nos encuentre con nuevas formas de sonreír.",
+                    "",
+                    "Y si alguna vez me preguntan qué fue lo más bonito",
+                    "que el destino puso en mi camino,",
+                    "no voy a hablar de lugares ni de momentos:",
+                    "voy a hablar de vos, mi amor,",
+                    "de la mujer que convirtió en sueño",
+                    "la vida que quiero vivir."
+                ]
+            },
+            {
+                type: 'content',
+                text: 'Te amo, mi niña hermosa. Te amo con esa mezcla de ternura, admiración, deseo, ilusión y gratitud que me hace querer abrazarte cada vez que pienso en vos. Te amo cuando estoy cerquita y cuando me toca extrañarte, cuando compartimos momentos bonitos y cuando simplemente pienso en las cosas que quiero vivir a thy lado.\n\nTe amo por la mujer que sos, por la persona que me permitís conocer y por todo lo que todavía nos queda por descubrir. Amo tus ojos, tu sonrisa, tu esencia y esas pequeñas particularidades que hacen que nadie pueda ocupar tu lugar en mi corazón de la misma manera.'
+            },
+            {
+                type: 'content',
+                text: 'Sos mi palomita guasiruca, mi loba, la niña de mis ojos, mi niña hermosa y la mujer con la que sueño compartir mi vida.\n\nY si alguna vez la vida nos concede la dicha de mirar hacia atrás después de muchos años, quiero que podamos hacerlo de la mano, sonreír al recordar todo lo que hemos vivido y sentir que valió la pena seguir construyendo esta historia. Quiero mirarte entonces con la misma emoción con la que te miro ahora, aunque hayan cambiado tantas cosas, y seguir encontrando en tus ojos esas perlas hermosas que tanto amo.'
+            },
+            {
+                type: 'content',
+                text: 'Porque hoy por hoy, mi amor, cuando imagino mi vida, quiero imaginarla con vos. Quiero que seas parte de mis planes, de mis alegrías, de mis recuerdos y de todo aquello que todavía sueño alcanzar. No sé exactamente cómo será cada capítulo de nuestro futuro, pero sé que me ilusiona escribirlo a tu lado.\n\nY nunca quiero que se me olvide agradecerte por las cosas que hacés por mí, por tu cariño y por esa manera tan bonita en que, a veces sin saberlo, conseguís hacerme sentir amado.'
+            },
+            {
+                type: 'content',
+                text: 'Gracias por estar para mí. Gracias por amarme. Gracias por ser la mujer de mi vida.\n\nTe amo, Katherine. Hoy, mientras sigo descubriendo la suerte que tengo de haberte encontrado, y con la ilusión de que la vida todavía nos regale muchísimas páginas para escribir juntos.\n\nCon todo mi amor, para vos, mi niña hermosa. ❤️'
+            },
+            {
+                type: 'backcover',
+                text: 'Con todo mi amor, siempre ❤️',
+                subtext: 'Tu Querido Joswar R.M.C'
+            }
+        ];
+
+        let currentContentPage = 1;
+        const bookPages = rawPages.map(page => {
+            if (page.type === 'content' || page.type === 'poem') {
+                return { ...page, pageNum: currentContentPage++ };
+            }
+            return page;
+        });
+
+        let currentPage = 0;
+        const totalPages = bookPages.length;
+        const bookEl = document.getElementById('book');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const currentPageNumEl = document.getElementById('currentPageNum');
+        const totalPagesNumEl = document.getElementById('totalPagesNum');
+        const progressBar = document.getElementById('progressBar');
+
+        totalPagesNumEl.textContent = totalPages;
+
+        function renderBook() {
+            bookEl.innerHTML = '';
+
+            bookPages.forEach((data, index) => {
+                const pageEl = document.createElement('div');
+                pageEl.className = 'page';
+                pageEl.style.zIndex = totalPages - index;
+
+                const frontEl = document.createElement('div');
+                frontEl.className = 'page-front flex flex-col justify-between p-3 sm:p-5';
+
+                if (data.type === 'cover') {
+                    frontEl.style.backgroundColor = 'var(--color-burgundy)';
+                    frontEl.style.color = '#fcf8f2';
+                    frontEl.innerHTML = `
+                        <div class="h-full w-full border-2 border-amber-400/60 rounded p-4 flex flex-col justify-between items-center text-center relative bg-gradient-to-b from-[#5c121d] via-[#4a0e17] to-[#2d080e]">
+                            <div class="mt-2">
+                                <div class="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-2 rounded-full border border-amber-400/40 flex items-center justify-center bg-amber-900/20">
+                                    <i class="fa-solid fa-heart text-amber-400 text-lg sm:text-xl pulse-glow"></i>
+                                </div>
+                                <h1 class="font-title text-lg sm:text-2xl font-bold tracking-wide text-amber-200 leading-snug drop-shadow-md">
+                                    ${data.title}
+                                </h1>
+                            </div>
+                            <div class="my-auto py-1">
+                                <span class="font-script text-2xl sm:text-4xl text-amber-300 block">${data.subtitle}</span>
+                                <div class="w-16 h-0.5 bg-amber-400/50 mx-auto mt-1"></div>
+                            </div>
+                            <p class="font-body text-[11px] sm:text-xs font-light text-amber-100/90 italic">
+                                "${data.footer}"
+                            </p>
+                        </div>
+                    `;
+                } else if (data.type === 'content') {
+                    frontEl.style.backgroundColor = 'var(--color-paper)';
+                    frontEl.style.color = 'var(--color-text)';
+                    
+                    const paragraphsHtml = data.text.split('\n\n').map(p => `<p class="fluid-paragraph text-[#3a2226] font-medium mb-2">${p}</p>`).join('');
+
+                    frontEl.innerHTML = `
+                        <div class="h-full w-full border border-amber-900/20 rounded p-3 sm:p-4 flex flex-col justify-between relative bg-gradient-to-b from-[#fdfbf7] via-[#fcf8f2] to-[#f7f0e6] overflow-hidden">
+                            <div class="flex justify-between items-center pb-1 border-b border-amber-900/10 flex-shrink-0">
+                                <span class="text-amber-800/40 text-xs">❤️</span>
+                                <span class="text-amber-900/40 text-[9px] uppercase tracking-widest font-title">Para Katherine</span>
+                            </div>
+                            <div class="my-auto py-1 flex-1 flex flex-col justify-center overflow-y-auto custom-scroll w-full px-1">
+                                ${paragraphsHtml}
+                            </div>
+                            <div class="pt-1 border-t border-amber-900/10 flex justify-center items-center flex-shrink-0">
+                                <span class="font-title text-[10px] text-amber-900/60 font-semibold tracking-widest">${data.pageNum}</span>
+                            </div>
+                        </div>
+                    `;
+                } else if (data.type === 'poem') {
+                    frontEl.style.backgroundColor = 'var(--color-paper)';
+                    frontEl.style.color = 'var(--color-text)';
+
+                    const poemHtml = data.verses.map(v => v === "" ? `<div class="h-1"></div>` : `<p class="verse-paragraph text-center font-body text-[#4a0e17] font-semibold italic">${v}</p>`).join('');
+
+                    frontEl.innerHTML = `
+                        <div class="h-full w-full border border-amber-900/20 rounded p-3 sm:p-4 flex flex-col justify-between relative bg-gradient-to-b from-[#fdfbf7] via-[#fcf8f2] to-[#f7f0e6] overflow-hidden">
+                            <div class="flex justify-between items-center pb-1 border-b border-amber-900/10 flex-shrink-0">
+                                <span class="text-amber-800/40 text-xs">✨</span>
+                                <span class="text-amber-900/40 text-[9px] uppercase tracking-widest font-title">Unos versos para vos</span>
+                            </div>
+                            <div class="my-auto py-1 flex-1 flex flex-col justify-center overflow-y-auto custom-scroll w-full px-1">
+                                <p class="text-xs font-title text-amber-900 text-center mb-1.5 italic font-semibold">${data.title}</p>
+                                ${poemHtml}
+                            </div>
+                            <div class="pt-1 border-t border-amber-900/10 flex justify-center items-center flex-shrink-0">
+                                <span class="font-title text-[10px] text-amber-900/60 font-semibold tracking-widest">${data.pageNum}</span>
+                            </div>
+                        </div>
+                    `;
+                } else if (data.type === 'backcover') {
+                    frontEl.style.backgroundColor = 'var(--color-burgundy)';
+                    frontEl.style.color = '#fcf8f2';
+                    frontEl.innerHTML = `
+                        <div class="h-full w-full border-2 border-amber-400/60 rounded p-4 flex flex-col justify-center items-center text-center relative bg-gradient-to-b from-[#5c121d] via-[#4a0e17] to-[#2d080e]">
+                            <div class="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 rounded-full border border-amber-400/40 flex items-center justify-center bg-amber-900/30">
+                                <i class="fa-solid fa-heart text-amber-400 text-lg sm:text-xl pulse-glow"></i>
+                            </div>
+                            <h2 class="font-title text-base sm:text-xl text-amber-200 font-semibold leading-relaxed mb-2">
+                                ${data.text}
+                            </h2>
+                            <p class="font-script text-2xl sm:text-3xl text-amber-300 mt-1">${data.subtext}</p>
+                        </div>
+                    `;
+                }
+
+                const backEl = document.createElement('div');
+                backEl.className = 'page-back p-4';
+                backEl.style.backgroundColor = (data.type === 'cover' || data.type === 'backcover') ? 'var(--color-burgundy-dark)' : 'var(--color-paper-shadow)';
+                backEl.innerHTML = `<div class="h-full w-full opacity-10 flex items-center justify-center"><i class="fa-solid fa-heart text-amber-900 text-4xl"></i></div>`;
+
+                pageEl.appendChild(frontEl);
+                pageEl.appendChild(backEl);
+
+                pageEl.addEventListener('click', (e) => {
+                    const scrollContainer = e.target.closest('.custom-scroll');
+                    if (scrollContainer && scrollContainer.scrollHeight > scrollContainer.clientHeight + 15) {
+                        return;
+                    }
+                    if (index === currentPage) {
+                        nextPage();
+                    } else if (index === currentPage - 1) {
+                        prevPage();
+                    }
+                });
+
+                bookEl.appendChild(pageEl);
+            });
+
+            updateBookState();
+        }
+
+        function updateBookState() {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach((page, index) => {
+                if (index < currentPage) {
+                    page.classList.add('flipped');
+                    page.style.zIndex = index + 1;
+                } else {
+                    page.classList.remove('flipped');
+                    page.style.zIndex = totalPages - index;
+                }
+            });
+
+            currentPageNumEl.textContent = currentPage + 1;
+            const progress = ((currentPage + 1) / totalPages) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            prevBtn.style.opacity = currentPage === 0 ? "0.4" : "1";
+            prevBtn.style.pointerEvents = currentPage === 0 ? "none" : "auto";
+
+            nextBtn.style.opacity = currentPage === totalPages - 1 ? "0.4" : "1";
+            nextBtn.style.pointerEvents = currentPage === totalPages - 1 ? "none" : "auto";
+
+            // Detener lectura de voz anterior al pasar de página si está activa
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                isReading = false;
+                updateReadButtonUI();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                playPageTurnSound();
+                updateBookState();
+                spawnHeartsBurst();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                playPageTurnSound();
+                updateBookState();
+            }
+        }
+
+        prevBtn.addEventListener('click', (e) => { e.stopPropagation(); prevPage(); });
+        nextBtn.addEventListener('click', (e) => { e.stopPropagation(); nextPage(); });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextPage();
+            if (e.key === 'ArrowLeft') prevPage();
+        });
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+        document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 45) nextPage();
+            if (touchEndX - touchStartX > 45) prevPage();
+        }, { passive: true });
+
+        // --- Web Speech API (Lector de voz integrado) ---
+        let isReading = false;
+        const readBtn = document.getElementById('readBtn');
+        const readIcon = document.getElementById('readIcon');
+        const readText = document.getElementById('readText');
+
+        function updateReadButtonUI() {
+            if (isReading) {
+                readIcon.className = "fa-solid fa-stop text-red-400 text-xs";
+                readText.textContent = "Detener";
+            } else {
+                readIcon.className = "fa-solid fa-volume-high text-amber-400 text-xs";
+                readText.textContent = "Leer";
+            }
+        }
+
+        function toggleSpeech() {
+            if (!('speechSynthesis' in window)) {
+                alert("Tu navegador no soporta la función de lectura de voz.");
+                return;
+            }
+
+            if (isReading) {
+                window.speechSynthesis.cancel();
+                isReading = false;
+                updateReadButtonUI();
+                return;
+            }
+
+            const currentData = bookPages[currentPage];
+            let textToRead = "";
+
+            if (currentData.type === 'cover') {
+                textToRead = `${currentData.title}. Para ${currentData.subtitle}. ${currentData.footer}`;
+            } else if (currentData.type === 'content') {
+                textToRead = currentData.text;
+            } else if (currentData.type === 'poem') {
+                textToRead = `${currentData.title}. ` + currentData.verses.join(' ');
+            } else if (currentData.type === 'backcover') {
+                textToRead = `${currentData.text}. ${currentData.subtext}`;
+            }
+
+            if (!textToRead) return;
+
+            const utterance = new SpeechSynthesisUtterance(textToRead);
+            utterance.lang = 'es-ES'; // Idioma español
+            utterance.rate = 0.92;    // Velocidad un poquito pausada y romántica
+            utterance.pitch = 1.0;
+
+            utterance.onstart = () => {
+                isReading = true;
+                updateReadButtonUI();
+            };
+
+            utterance.onend = () => {
+                isReading = false;
+                updateReadButtonUI();
+            };
+
+            utterance.onerror = () => {
+                isReading = false;
+                updateReadButtonUI();
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        readBtn.addEventListener('click', toggleSpeech);
+
+        // Web Audio Synthesizer (Music)
+        let audioCtx = null;
+        let isMusicPlaying = false;
+        let musicInterval = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playPageTurnSound() {
+            try {
+                initAudio();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                
+                const bufferSize = audioCtx.sampleRate * 0.08;
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(600, audioCtx.currentTime);
+
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioCtx.destination);
+                noise.start();
+            } catch (e) {}
+        }
+
+        const musicBtn = document.getElementById('musicBtn');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicText = document.getElementById('musicText');
+
+        const romanticNotes = [
+            [261.63, 329.63, 392.00, 493.88],
+            [220.00, 261.63, 329.63, 392.00],
+            [174.61, 220.00, 261.63, 329.63],
+            [196.00, 246.94, 293.66, 392.00]
+        ];
+        let chordIndex = 0;
+
+        function playRomanticChord() {
+            if (!isMusicPlaying || !audioCtx) return;
+            const now = audioCtx.currentTime;
+            const chord = romanticNotes[chordIndex];
+            chordIndex = (chordIndex + 1) % romanticNotes.length;
+
+            chord.forEach((freq) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now);
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.02, now + 1.2);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 3.2);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 3.3);
+            });
+        }
+
+        musicBtn.addEventListener('click', () => {
+            initAudio();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            isMusicPlaying = !isMusicPlaying;
+
+            if (isMusicPlaying) {
+                musicIcon.className = "fa-solid fa-volume-high text-amber-400 text-xs";
+                musicText.textContent = "Música: On";
+                playRomanticChord();
+                musicInterval = setInterval(playRomanticChord, 3400);
+            } else {
+                musicIcon.className = "fa-solid fa-music text-xs";
+                musicText.textContent = "Música: Off";
+                if (musicInterval) clearInterval(musicInterval);
+            }
+        });
+
+        // Particle System
+        const heartContainer = document.getElementById('heartContainer');
+        const particlesBtn = document.getElementById('particlesBtn');
+        let particlesEnabled = true;
+        let heartTimer = null;
+
+        function createHeart() {
+            if (!particlesEnabled) return;
+            const heart = document.createElement('i');
+            heart.className = 'fa-solid fa-heart heart-particle';
+            
+            const size = Math.random() * 12 + 8;
+            const left = Math.random() * 100;
+
+            heart.style.left = `${left}vw`;
+            heart.style.fontSize = `${size}px`;
+            heart.style.color = Math.random() > 0.4 ? '#e63946' : '#d4af37';
+
+            heartContainer.appendChild(heart);
+            setTimeout(() => heart.remove(), 3200);
+        }
+
+        function spawnHeartsBurst() {
+            for (let i = 0; i < 3; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+        }
+
+        particlesBtn.addEventListener('click', () => {
+            particlesEnabled = !particlesEnabled;
+            if (particlesEnabled) {
+                particlesBtn.classList.remove('opacity-50');
+                heartTimer = setInterval(createHeart, 1000);
+            } else {
+                particlesBtn.classList.add('opacity-50');
+                if (heartTimer) clearInterval(heartTimer);
+                heartContainer.innerHTML = '';
+            }
+        });
+
+        window.onload = function() {
+            renderBook();
+            heartTimer = setInterval(createHeart, 1000);
+        };
+
+        window.onresize = function() {
+            updateBookState();
+        };
+    </script>
+</body>
+</html>
